@@ -51,7 +51,9 @@ const Home = () => {
             See all <ChevronRight size={16} />
           </button>
         </div>
-        
+        <div>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. At reiciendis nisi possimus velit aliquam ipsa id voluptatem, blanditiis repellat nulla quidem corporis ad facere atque explicabo ipsum voluptate? Ipsam, a?
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
           {featuredPlaylists.slice(0, 6).map(playlist => (
             <PlaylistCard key={playlist.id} playlist={playlist} />
