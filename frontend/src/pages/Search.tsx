@@ -20,7 +20,7 @@ const Search = () => {
         playlists: searchPlaylists(query),
         artists: []
       };
-      setSearchResults(results);
+      // setSearchResults(results);
     } else {
       setSearchResults({
         tracks: [],
