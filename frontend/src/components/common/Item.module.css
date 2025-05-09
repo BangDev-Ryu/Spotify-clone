@@ -1,0 +1,57 @@
+.container {
+  position: relative;
+  cursor: pointer;
+  background-color: #181818;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex; /* Dùng Flexbox để căn chỉnh theo chiều ngang */
+  align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
+}
+
+.imageContainer {
+  width: 3.2rem; /* Đặt chiều rộng cho hình ảnh */
+  height: 3.2rem; /* Đặt chiều cao cho hình ảnh */
+  margin-right: 10px; /* Khoảng cách giữa hình ảnh và tiêu đề */
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Đặt nút Play ở bên phải */
+  width: 40px;
+  height: 40px;
+  background-color: #1ed760;
+  border-radius: 50%;
+  opacity: 0; /* Ẩn nút play mặc định */
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-50%); /* Căn nút Play vào giữa theo chiều dọc */
+}
+
+/* Hiển thị nút play khi hover vào container */
+.container:hover .playButton {
+  opacity: 1;
+}
+
+.container:hover {
+  background-color: #282828;
+}
+
+.title {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex-grow: 1; /* Tiêu đề sẽ chiếm không gian còn lại của phần tử */
+}
