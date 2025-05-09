@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+html, body {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background-color: #000000;
+  min-height: 100vh;
+}
+
+/* Swiper custom styles */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  color: white !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 20px !important;
+}
+
+.swiper-button-disabled {
+  opacity: 0 !important;
+}
