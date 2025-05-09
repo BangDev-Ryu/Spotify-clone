@@ -20,7 +20,7 @@ export default function Header() {
             className="bg-transparent text-white placeholder-gray-400 outline-none w-full"
           />
            <span className="text-gray-400 mx-1 text-2xl">|</span>
-          <FiCreditCard className="text-white-400 ml-3 w-8 h-8" />
+          <FiCreditCard className="text-gray-400 ml-3 w-7 h-7 " />
         </div>
       </div>
 
