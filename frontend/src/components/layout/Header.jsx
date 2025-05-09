@@ -3,7 +3,7 @@ import { SiSpotify } from "react-icons/si";
 
 export default function Header() {
   return (
-    <header className="w-full h-16 bg-black flex items-center justify-between px-4 shadow z-10">
+    <header className="w-full fixed h-16 top-0 bg-black flex items-center justify-between px-4 z-10">
      
         <SiSpotify className="text-white w-8 h-8 ml-3" />
 

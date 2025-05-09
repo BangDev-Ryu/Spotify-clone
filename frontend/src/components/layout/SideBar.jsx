@@ -9,10 +9,10 @@ import { FaPlay } from "react-icons/fa";
 
 export default function Sidebar() {
   return (
-    <aside className="fixed top-16 left-0 w-64 h-[calc(100vh-64px)] bg-black text-white flex flex-col z-20 px-4 py-3 overflow-y-auto">
+    <aside className="fixed top-16 left-0 w-64 h-[calc(100vh-64px)] bg-[#121212] rounded-sm text-white flex flex-col z-20 px-4 py-3 overflow-y-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg text-bold text-sm font-bold">Your Library</h2>
+        <h2 className="text-bold text-sm font-bold">Your Library</h2>
         <div className="flex items-center gap-2">
          <button className="flex items-center gap-1 text-sm font-bold bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded-full">
           <FiPlus className="text-base" />

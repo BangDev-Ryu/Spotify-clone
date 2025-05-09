@@ -125,7 +125,7 @@ const playlist3 = [
 
 export default function MainContent() {
   return (
-    <main className="ml-68 rounded-sm p-4 bg-[#121212] pb-20">
+    <main className="ml-68 mt-16 rounded-sm p-4 bg-[#121212] pb-20">
       <SongRow title="Đây là Giai điệu mới mỗi thứ Sáu!" playlists={playlist1} />
       <SongRow title="Phát gần đây" playlists={playlist2} />
       <SongRow title="Top 50" playlists={playlist3} />
