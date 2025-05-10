@@ -29,3 +29,79 @@ html, body {
 .swiper-button-disabled {
   opacity: 0 !important;
 }
+
+/* Volume Slider Custom Styles */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Progress track */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #ffffff var(--progress-value, 0%), #4d4d4d var(--progress-value, 0%));
+}
+
+/* Tùy chỉnh nút điều chỉnh */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  margin-top: -6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  height: 16px;
+  width: 16px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hiển thị nút điều chỉnh khi hover */
+input[type="range"]:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+/* Đổi màu phần đã điều chỉnh */
+/* input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, #fff 0%, #fff 50%, #4d4d4d 50%, #4d4d4d 100%);
+} */
+
+/* Firefox styles */
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background-color: #4d4d4d;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  height: 16px;
+  width: 16px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+  opacity: 1;
+}
+
+/* Hiệu ứng hover cho container */
+.group:hover input[type="range"]::-webkit-slider-thumb {
+  opacity: 1;
+}
