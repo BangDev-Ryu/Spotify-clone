@@ -1,20 +1,19 @@
 import React from "react";
-import styles from "./Item.module.css";
 
 const Item = ({ img = "/images/default-track.png", title = "This is title" }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.imageContainer}>
+    <div className="relative flex items-center cursor-pointer bg-[#181818] rounded-lg overflow-hidden hover:bg-[#282828] group p-2">
+      <div className="w-[3.2rem] h-[3.2rem] mr-3">
         <img
           src={img}
           alt="Track Image"
-          className={styles.icon}
+          className="w-full h-full rounded-lg"
         />
       </div>
-      <h1 className={styles.title}>{title}</h1>
+      <h1 className="text-white text-base font-bold truncate flex-grow">{title}</h1>
       
       {/* Nút Play sẽ xuất hiện khi hover vào Item */}
-      <button className={styles.playButton}>
+      <button className="absolute top-1/2 right-3 w-10 h-10 bg-[#1ed760] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center shadow-lg -translate-y-1/2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
