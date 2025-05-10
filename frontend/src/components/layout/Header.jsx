@@ -25,7 +25,6 @@ export default function Header() {
       </div>
 
 
-      {/* RIGHT SECTION */}
       <div className="flex items-center gap-x-6 text-white">
         <button className="bg-white text-black text-sm text-opacity-0 font-bold px-4 py-1 rounded-full hover:opacity-90  transition ">
           Explore Premium
