@@ -1,15 +1,14 @@
 import React from "react";
-import Item from "../common/Item";
-import styles from "./ItemGrid.module.css";
+import Item from "./Item";
 
-const ItemGrid = ({ items, columns = 3 }) => {
-  // Tạo một chuỗi các cột dựa trên số lượng cột được truyền vào
-  const ItemGridStyle = {
-    gridTemplateColumns: `repeat(${columns}, 1fr)`, // "1fr" là phần chia đều cho mỗi cột
-  };
-
+const ItemGrid = ({ items, columns }) => {
   return (
-    <div className={styles.gridContainer} style={ItemGridStyle}>
+    <div 
+      className="grid gap-2 w-full px-4 py-4"
+      style={{
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`
+      }}
+    >
       {items.map((item, index) => (
         <Item key={index} img={item.img} title={item.title} />
       ))}

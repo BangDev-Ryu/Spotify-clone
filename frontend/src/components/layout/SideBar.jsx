@@ -3,9 +3,7 @@ import {
   FiPlus,
   FiArrowUpRight,
   FiMenu,
-  FiBook,
 } from "react-icons/fi";
-import { FaPlay } from "react-icons/fa";
 
 export default function Sidebar() {
   return (
