@@ -1,0 +1,6 @@
+/* ItemGrid.module.css */
+.gridContainer {
+  display: grid;
+  gap: 10px; /* Khoảng cách giữa các phần tử */
+  width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+}
