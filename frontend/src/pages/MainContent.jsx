@@ -1,5 +1,5 @@
-import SongRow from "../common/SongRow";
-import ItemGrid from "../common/ItemGrid";
+import SongRow from "../components/common/SongRow";
+import ItemGrid from "../components/common/ItemGrid";
 const playlist1 = [
   {
     id: "1",
