@@ -1,5 +1,5 @@
-import SongRow from "../components/common/SongRow";
-import ItemGrid from "../components/common/ItemGrid";
+import SongRow from "../common/SongRow";
+import ItemGrid from "../common/ItemGrid";
 import { useEffect, useState } from "react";
 const playlist1 = [
   {
@@ -145,7 +145,7 @@ export default function MainContent() {
 
   const fetchTracks = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/track/");
+      const response = await fetch("http://127.0.0.1:8000/api/tracks/");
       const data = await response.json();
       setTracks(data);
     } catch (error) {

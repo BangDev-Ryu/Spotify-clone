@@ -1,8 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainContent from "../pages/MainContent";
-import Track from "../pages/Track";
-import AlbumPage from "../pages/AlbumPage";
-import PlaylistPage from "../pages/PlaylistPage";
+import MainContent from "../components/pages/MainContent";
+import Track from "../components/pages/Track";
+import AlbumPage from "../components/pages/AlbumPage";
+import PlaylistPage from "../components/pages/PlaylistPage";
+
 
 export const router = createBrowserRouter([
   {

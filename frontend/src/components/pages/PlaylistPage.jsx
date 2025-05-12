@@ -1,6 +1,6 @@
 import React from "react";
 import Music from "/images/default-track.png";
-import SongTable from '../components/common/SongTable';
+import SongTable from '../common/SongTable';
 
 export default function PlaylistPage() {
 const songs = [
