@@ -74,7 +74,7 @@ const mockAlbums2 = [
   },
 ];
 
-export default function Track() {
+export default function TrackContent() {
   return (
     <div className="ml-[270px] pb-48 mt-[64px] w-[calc(100vw-290px)] rounded-2xl overflow-hidden">
       <div className="h-[300px] w-full bg-[#3B3434FF] flex items-center">

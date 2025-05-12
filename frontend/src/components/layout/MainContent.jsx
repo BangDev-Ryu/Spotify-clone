@@ -1,56 +1,6 @@
 import SongRow from "../common/SongRow";
 import ItemGrid from "../common/ItemGrid";
 import { useEffect, useState } from "react";
-const playlist1 = [
-  {
-    id: "1",
-    image: "/images/default-track.png",
-    title: "New Music Friday",
-    description: "The hottest new releases this week",
-  },
-  {
-    id: "2",
-    image: "/images/default-track.png",
-    title: "Top Hits Vietnam",
-    description: "The most popular songs in Vietnam",
-  },
-  {
-    id: "3",
-    image: "/images/default-track.png",
-    title: "Chill Vibes",
-    description: "Relaxing music for your downtime",
-  },
-  {
-    id: "4",
-    image: "/images/default-track.png",
-    title: "Workout Mix",
-    description: "High-energy tracks to keep you motivated",
-  },
-  {
-    id: "5",
-    image: "/images/default-track.png",
-    title: "Throwback Hits",
-    description: "Nostalgic songs from the past",
-  },
-  {
-    id: "6",
-    image: "/images/default-track.png",
-    title: "Indie Discoveries",
-    description: "Hidden gems from the indie music scene",
-  },
-  {
-    id: "7",
-    image: "/images/default-track.png",
-    title: "Pop Perfection",
-    description: "The best pop songs of the moment",
-  },
-  {
-    id: "8",
-    image: "/images/default-track.png",
-    title: "Rock Classics",
-    description: "Timeless rock anthems",
-  },
-];
 
 const playlist2 = [
   {
