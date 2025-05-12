@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import SidebarPlaylists from "../common/SidebarPlaylists";
 import {
   FiSearch,
   FiPlus,
@@ -7,24 +8,26 @@ import {
   FiChevronsLeft,
 } from "react-icons/fi";
 
-export default function Sidebar() {
+export default function SideBar() {
   const [showSearch, setShowSearch] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoverTitle, setHoverTitle] = useState(false);
+  const [playlists, setPlaylists] = useState([]);
   const searchInputRef = useRef(null);
 
-  // Danh sách Playlist có ảnh tham chiếu theo ID
-  const playlists = [
-    { id: 1, name: "Liked Songs", image: "/images/liked-songs.svg" },
-    { id: 2, name: "Playlist 1", image: "/images/default-track.png" },
-    { id: 3, name: "Playlist 2", image: "/images/default-track.png" },
-    { id: 4, name: "Playlist 3", image: "/images/default-track.png" },
-    { id: 5, name: "Playlist 4", image: "/images/default-track.png" },
-    { id: 6, name: "Playlist 5", image: "/images/default-track.png" }
-
-  ];
+  const fetchPlaylists = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/playlists/");
+      const data = await response.json();
+      setPlaylists(data);
+    } catch (error) {
+      console.error("Failed to fetch playlists:", error);
+    }
+  };
 
   useEffect(() => {
+    fetchPlaylists();
+
     const handleClickOutside = (event) => {
       if (
         searchInputRef.current &&
@@ -77,7 +80,6 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* Right side */}
         {!isCollapsed && (
           <div className="flex items-center gap-2">
             <button className="flex items-center gap-1 text-sm font-bold bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded-full">
@@ -88,7 +90,6 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Tabs */}
       {!isCollapsed && (
         <div className="flex gap-2 mb-4">
           <button className="px-3 py-1 bg-neutral-800 text-sm rounded-full font-semibold">
@@ -100,7 +101,6 @@ export default function Sidebar() {
         </div>
       )}
 
-      {/* Search + Sort */}
       <div className="flex items-center justify-between mb-4 text-white/70">
         <div className="relative">
           <button
@@ -111,7 +111,10 @@ export default function Sidebar() {
           </button>
 
           {showSearch && !isCollapsed && (
-            <div className="flex items-center bg-neutral-700 rounded-full w-40 mt-1" ref={searchInputRef}>
+            <div
+              className="flex items-center bg-neutral-700 rounded-full w-40 mt-1"
+              ref={searchInputRef}
+            >
               <FiSearch className="text-white ml-3" />
               <input
                 type="text"
@@ -130,39 +133,7 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Playlist Items */}
-      {!isCollapsed && (
-        <div className="mb-4 space-y-2">
-          {playlists.length > 0 ? (
-            playlists.map((playlist) =>
-              playlist.name.trim() !== "" ? (
-                <button
-                  key={playlist.id}
-                  className="flex items-center gap-3 w-full h-15 text-base text-left px-3 py-1 bg-neutral-800  rounded font-semibold hover:bg-neutral-700"
-                >
-                  <img
-                    src={playlist.image}
-                    alt={playlist.name}
-                    className="w-6 h-6 rounded object-cover"
-                  />
-                  {playlist.name}
-                </button>
-              ) : (
-                <div
-                  key={playlist.id}
-                  className="text-neutral-500 text-sm px-3 py-1"
-                >
-                  No Playlist Available
-                </div>
-              )
-            )
-          ) : (
-            <div className="text-neutral-500 text-sm px-3 py-1">
-              No Playlist Available
-            </div>
-          )}
-        </div>
-      )}
+      <SidebarPlaylists playlists={playlists} isCollapsed={isCollapsed} />
     </aside>
   );
 }
