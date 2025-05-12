@@ -51,8 +51,8 @@ const SongRow = ({ title, playlists }) => {
           <SwiperSlide key={playlist.id}>
             <ItemCard
               image={playlist.image}
-              title={playlist.title}
-              description={playlist.description}
+              title={playlist.name}
+              description={playlist.name}
             />
           </SwiperSlide>
         ))}
@@ -64,12 +64,7 @@ const SongRow = ({ title, playlists }) => {
 SongRow.propTypes = {
   title: PropTypes.string.isRequired,
   playlists: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string,
-    })
+    
   ).isRequired,
 };
 
