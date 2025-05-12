@@ -29,7 +29,6 @@ build/
 *.sqlite3
 media/
 static/
-migrations/
 
 # IDE and Editor files
 .vscode/*

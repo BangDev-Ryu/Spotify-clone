@@ -1,5 +1,6 @@
 import SongRow from "../components/common/SongRow";
 import ItemGrid from "../components/common/ItemGrid";
+import { useEffect, useState } from "react";
 const playlist1 = [
   {
     id: "1",
@@ -123,7 +124,7 @@ const playlist3 = [
   },
 ];
 
-const data = [
+const dataGrid = [
   { img: "/images/default-track.png", title: "Track 1" },
   { img: "/images/default-track.png", title: "Track 2" },
   { img: "/images/default-track.png", title: "Track 3" },
@@ -136,12 +137,28 @@ const data = [
 
 
 export default function MainContent() {
+  const [tracks, setTracks] = useState([]);
+
+  useEffect(() => {
+    fetchTracks();
+  }, []);
+
+  const fetchTracks = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/track/");
+      const data = await response.json();
+      setTracks(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <main className="ml-68 mt-16 rounded-sm p-4 bg-[#121212] pb-20">
-      <ItemGrid items={data} columns={4} />
+      <ItemGrid items={dataGrid} columns={4} />
       <SongRow
         title="Đây là Giai điệu mới mỗi thứ Sáu!"
-        playlists={playlist1}
+        playlists={tracks}
       />
       <SongRow title="Phát gần đây" playlists={playlist2} />
       <SongRow title="Top 50" playlists={playlist3} />
