@@ -66,7 +66,7 @@ export default function SideBar() {
           )}
 
           {!isCollapsed && (
-            <h2 className="text-bold text-sm font-bold">Your Library</h2>
+            <h2 className="text-bold text-sm font-bold">Thư viện</h2>
           )}
 
           {isCollapsed && (
@@ -84,7 +84,7 @@ export default function SideBar() {
           <div className="flex items-center gap-2">
             <button className="flex items-center gap-1 text-sm font-bold bg-neutral-800 hover:bg-neutral-700 text-white px-3 py-1.5 rounded-full">
               <FiPlus className="text-base" />
-              <span>Create</span>
+              <span>Tạo</span>
             </button>
           </div>
         )}
@@ -93,10 +93,10 @@ export default function SideBar() {
       {!isCollapsed && (
         <div className="flex gap-2 mb-4">
           <button className="px-3 py-1 bg-neutral-800 text-sm rounded-full font-semibold">
-            Playlists
+            Danh sách phát
           </button>
           <button className="px-3 py-1 bg-neutral-800 text-sm rounded-full font-semibold">
-            Albums
+            Album
           </button>
         </div>
       )}
@@ -118,7 +118,7 @@ export default function SideBar() {
               <FiSearch className="text-white ml-3" />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Tìm kiếm.."
                 className="bg-transparent text-white text-sm px-3 py-1 rounded-full w-full focus:outline-none"
               />
             </div>
@@ -127,7 +127,7 @@ export default function SideBar() {
 
         {!isCollapsed && (
           <div className="flex items-center gap-1 hover:text-white cursor-pointer">
-            <span>Recents</span>
+            <span>Gần đây</span>
             <FiMenu />
           </div>
         )}
