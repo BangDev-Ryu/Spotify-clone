@@ -1,13 +1,30 @@
 import DefaultLayout from './components/layout/DefaultLayout';
-import { router } from './router';
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import MainContent from './components/pages/MainContent';
+import Login from './components/pages/Login';
+import Register from './components/pages/Register';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <DefaultLayout>
+      <MainContent />
+    </DefaultLayout>
+  },
+  {
+    path: "/login",
+    element: <Login />
+  },
+  {
+    path: "/register", 
+    element: <Register />
+  }
+]);
 
 export default function App() {
   return (
     <div className="App">
-      <DefaultLayout>
-        <RouterProvider router={router} />
-      </DefaultLayout>
+      <RouterProvider router={router} />
     </div>
   );
 }
