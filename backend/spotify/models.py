@@ -23,7 +23,7 @@ class Artist(models.Model):
 
 class Album(models.Model):
     album_id = models.AutoField(primary_key=True)
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
     release_date = models.DateField()
     image = models.CharField(max_length=255)
@@ -70,7 +70,7 @@ class Like(models.Model):
 
 class Follower(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True)
 
     class Meta:
         unique_together = ('user', 'artist')  # Đảm bảo một user chỉ follow một artist 1 lần

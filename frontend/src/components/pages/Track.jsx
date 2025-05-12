@@ -1,6 +1,6 @@
 import React from "react";
 import Music from "/images/default-track.png";
-import SongRow from "../components/common/SongRow";
+import SongRow from "../common/SongRow";
 
 const mockAlbums = [
   {
