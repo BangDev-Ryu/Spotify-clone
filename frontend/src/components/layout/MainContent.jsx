@@ -23,56 +23,6 @@ const playlist2 = [
   },
 ];
 
-const playlist3 = [
-  {
-    id: "1",
-    image: "/images/default-track.png",
-    title: "Top 50 Global",
-    description: "",
-  },
-  {
-    id: "2",
-    image: "/images/default-track.png",
-    title: "Top 50 Vietnam",
-    description: "",
-  },
-  {
-    id: "3",
-    image: "/images/default-track.png",
-    title: "Top 50 US-UK",
-    description: "",
-  },
-  {
-    id: "4",
-    image: "/images/default-track.png",
-    title: "Top 50 K-Pop",
-    description: "",
-  },
-  {
-    id: "5",
-    image: "/images/default-track.png",
-    title: "Top 50 Latin",
-    description: "",
-  },
-  {
-    id: "6",
-    image: "/images/default-track.png",
-    title: "Top 50 Indie",
-    description: "",
-  },
-  {
-    id: "7",
-    image: "/images/default-track.png",
-    title: "Top 50 R&B",
-    description: "",
-  },
-  {
-    id: "8",
-    image: "/images/default-track.png",
-    title: "Top 50 Hip-Hop",
-    description: "",
-  },
-];
 
 const dataGrid = [
   { img: "/images/default-track.png", title: "Track 1" },
@@ -88,9 +38,11 @@ const dataGrid = [
 
 export default function MainContent() {
   const [tracks, setTracks] = useState([]);
+  const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
     fetchTracks();
+    fetchAlbums();
   }, []);
 
   const fetchTracks = async () => {
@@ -103,15 +55,34 @@ export default function MainContent() {
     }
   }
 
+  const fetchAlbums = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/albums/");
+      const data = await response.json();
+      setAlbums(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <main className="ml-68 mt-16 rounded-sm p-4 bg-[#121212] pb-20">
       <ItemGrid items={dataGrid} columns={4} />
       <SongRow
-        title="Đây là Giai điệu mới mỗi thứ Sáu!"
-        playlists={tracks}
+        title="Các bài hát thịnh hành!"
+        datas={tracks}
+        type="track"
       />
-      <SongRow title="Phát gần đây" playlists={playlist2} />
-      <SongRow title="Top 50" playlists={playlist3} />
+      <SongRow 
+        title="Phát gần đây" 
+        datas={playlist2} 
+        type="playlist"
+      />
+      <SongRow 
+        title="Top Album" 
+        datas={albums} 
+        type="album"  
+      />
     </main>
   );
 }
