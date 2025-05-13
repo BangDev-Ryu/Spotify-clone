@@ -5,7 +5,20 @@ import ItemCard from './ItemCard';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const SongRow = ({ title, playlists }) => {
+const SongRow = ({ title, datas, type = 'track' }) => {
+  const getDescription = (item) => {
+    switch (type) {
+      case 'track':
+        return ''; // Track không có description
+      case 'album':
+        return `${item.release_date?.split('-')[0]} · Album`; // Thêm năm phát hành và loại
+      case 'playlist':
+        return item.description || 'Playlist'; // Description của playlist
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="px-4 py-4">
       <div className="flex justify-between items-center mb-4">
@@ -47,12 +60,14 @@ const SongRow = ({ title, playlists }) => {
           }
         }}
       >
-        {playlists.map((playlist) => (
-          <SwiperSlide key={playlist.id}>
+        {datas.map((data) => (
+          <SwiperSlide key={data.id}>
             <ItemCard
-              image={playlist.image}
-              title={playlist.name}
-              description={playlist.name}
+              id={data.track_id}
+              type={type}
+              image={data.image}
+              title={data.name}
+              description={getDescription(data)}
             />
           </SwiperSlide>
         ))}
@@ -63,9 +78,16 @@ const SongRow = ({ title, playlists }) => {
 
 SongRow.propTypes = {
   title: PropTypes.string.isRequired,
-  playlists: PropTypes.arrayOf(
-    
+  datas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      release_date: PropTypes.string, // For albums
+    })
   ).isRequired,
+  type: PropTypes.oneOf(['track', 'album', 'playlist'])
 };
 
 export default SongRow;

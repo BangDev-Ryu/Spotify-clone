@@ -24,11 +24,21 @@ def album_list(request):
     serializer = AlbumSerializer(albums, many=True)
     return Response(serializer.data)
 
+########## track ##########
 @api_view(['GET'])
 def track_list(request):
     tracks = Track.objects.all()
     serializer = TrackSerializer(tracks, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def track_detail(request, pk):
+    try:
+        track = Track.objects.get(track_id=pk)
+        serializer = TrackSerializer(track)
+        return Response(serializer.data)
+    except Track.DoesNotExist:
+        return Response(status=404)
 
 @api_view(['GET'])
 def playlist_list(request):

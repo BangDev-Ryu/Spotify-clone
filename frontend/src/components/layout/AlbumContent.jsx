@@ -1,7 +1,7 @@
 import React from 'react'
 import Music from "/images/default-track.png";
 import SongTable from '../common/SongTable';
-export default function AlbumPage() {
+export default function AlbumContent() {
     const songs = [
         { title: "Chập Chờn", artist: "Dương Domic", duration: "3:12" },
         { title: "Tràn Bộ Nhớ", artist: "Dương Domic", duration: "2:52" },

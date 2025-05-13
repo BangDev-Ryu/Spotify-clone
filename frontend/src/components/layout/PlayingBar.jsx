@@ -1,15 +1,10 @@
-/* eslint-disable no-unused-vars */
 import { useState, useRef } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+import { usePlayer } from '../../context/PlayerContext';
 
 export default function PlayingBar() {
-  const [currentTrack, setCurrentTrack] = useState({
-    title: "Glimpse of Us",
-    artist: "Joji",
-    image: "/images/default-track.png",
-    audio: "/tracks/demo.mp3"
-  });
+  const { currentTrack } = usePlayer();
 
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
@@ -70,27 +65,35 @@ export default function PlayingBar() {
     <div className="fixed bottom-0 left-0 right-0 h-24 bg-black border-t border-[#282828] px-4 flex items-center z-50">
       {/* Track Info - Left */}
       <div className="flex items-center min-w-[180px] w-[30%]">
-        <img 
-          src={currentTrack.image} 
-          alt={currentTrack.title}
-          className="h-14 w-14 rounded object-cover"
-        />
-        <div className="ml-3">
-          <div className="text-sm text-white hover:underline cursor-pointer">{currentTrack.title}</div>
-          <div className="text-xs text-gray-400 hover:underline cursor-pointer">{currentTrack.artist}</div>
-        </div>
-        <button className="ml-4 text-gray-400 hover:text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-          </svg>
-        </button>
+        {currentTrack && (
+          <>
+            <img 
+              src={currentTrack.image} 
+              alt={currentTrack.title}
+              className="h-14 w-14 rounded object-cover"
+            />
+            <div className="ml-3">
+              <div className="text-sm text-white hover:underline cursor-pointer">
+                {currentTrack.title}
+              </div>
+              <div className="text-xs text-gray-400 hover:underline cursor-pointer">
+                {currentTrack.artist}
+              </div>
+            </div>
+            <button className="ml-4 text-gray-400 hover:text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+              </svg>
+            </button>
+          </>
+        )}
       </div>
 
       {/* Player Controls - Center */}
-      <div className=" max-w-[50%] w-full">
+      <div className="max-w-[50%] w-full">
         <AudioPlayer
           ref={audioRef}
-          src={currentTrack.audio}
+          src={currentTrack?.audio || ''}
           showSkipControls={true}
           showJumpControls={false}
           layout="stacked-reverse"

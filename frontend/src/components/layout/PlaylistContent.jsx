@@ -2,7 +2,7 @@ import React from "react";
 import Music from "/images/default-track.png";
 import SongTable from '../common/SongTable';
 
-export default function PlaylistPage() {
+export default function PlaylistContent() {
 const songs = [
   { title: "1000 Ánh Mắt", artist: "Shiki, Obito", duration: "2:32" },
   { title: "Anh Vẫn Đợi", artist: "Shiki", duration: "2:32" },
