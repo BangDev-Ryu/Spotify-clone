@@ -25,12 +25,16 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-x-4 text-white">
-        <div className="flex items-center gap-x-2">
-          <FiDownload className="w-5 h-5" />
-          <span className="text-gray-300 hover:text-white cursor-pointer font-semibold text-base">
-            Cài đặt ứng dụng
-          </span>
-        </div>
+          <a href="https://download.scdn.co/SpotifySetup.exe">
+          
+          <div className="flex items-center gap-x-2">
+              <FiDownload className="w-5 h-5" />
+              <span className="text-gray-300 hover:text-white cursor-pointer font-semibold text-base">
+                Cài đặt ứng dụng
+              </span>
+            
+          </div>
+          </a>
         <div className="h-8 w-[1px] bg-white/10"></div>
         <Link to="/register">
           <button className="text-gray-300 hover:text-white hover:scale-105 font-bold text-base">
