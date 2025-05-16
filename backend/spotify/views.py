@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from datetime import date
 # from rest_framework import status
 from .models import User, Artist, Album, Track, Playlist, PlaylistTrack, Like, Follower, Premium, UserPremium, Payment
 
@@ -97,8 +98,23 @@ def payment_list(request):
     serializer = PaymentSerializer(payments, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def payment_list(request):
-    payments = User.objects.all()
-    serializer = UserSerializer(payments, many=True)
-    return Response(serializer.data)
+
+@api_view(['POST'])
+def create_payment(request):
+    user_id = request.data.get('user_id')
+    payment_method = request.data.get('payment_method')
+    amount = request.data.get('amount')
+
+    try:
+        user = User.objects.get(pk=user_id)
+        payment = Payment.objects.create(
+            user=user,
+            payment_method=payment_method,
+            payment_date=date.today(),
+            amount=amount if amount else None
+        )
+        return Response({'success': True, 'payment_id': payment.payment_id})
+    except User.DoesNotExist:
+        return Response({'success': False, 'error': 'User not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=400)

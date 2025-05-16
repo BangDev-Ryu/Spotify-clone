@@ -1,9 +1,10 @@
 import { FiHome, FiDownload, FiBell } from "react-icons/fi";
 import { SiSpotify } from "react-icons/si";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate} from 'react-router-dom';
 import Search from '../common/Search'; // Import Search component
 
 export default function Header() {
+    const navigate = useNavigate();
     const location = useLocation();
     const isUserPage = location.pathname.startsWith("/user/");
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -26,7 +27,7 @@ export default function Header() {
       {isUserPage ? (
         <div className="flex items-center gap-x-6 text-white">
           {!isPremium && (
-            <button className="bg-white text-black text-sm font-bold px-4 py-1 rounded-full hover:opacity-90 transition">
+            <button className="bg-white text-black text-sm font-bold px-4 py-1 rounded-full hover:opacity-90 transition"onClick={() => navigate("/premium")}>
               Đăng ký Premium
             </button>
           )}

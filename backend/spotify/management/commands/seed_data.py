@@ -111,8 +111,7 @@ class Command(BaseCommand):
             UserPremium.objects.create(**user_premium_data)
 
         payments = [
-            {"user": user_one, "payment_method": "Credit Card", "payment_date": "2025-05-01", "amount": 99.99},
-            {"user": user_two, "payment_method": "PayPal", "payment_date": "2025-05-02", "amount": 49.99},
+            {"user": user_one, "payment_method": "Momo", "payment_date": "2025-05-01", "amount": 99.99},
         ]
         for payment_data in payments:
             Payment.objects.create(**payment_data)
