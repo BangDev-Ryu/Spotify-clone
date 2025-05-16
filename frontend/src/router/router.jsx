@@ -18,6 +18,10 @@ export const router = createBrowserRouter([
         element: <MainContent />,
       },
       {
+        path: "/user/:id",
+        element: <MainContent />,
+      },
+      {
         path: "/track/:id",
         element: <TrackContent />,
       },

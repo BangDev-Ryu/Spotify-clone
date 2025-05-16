@@ -1,9 +1,13 @@
-import { FiHome, FiDownload } from "react-icons/fi";
+import { FiHome, FiDownload, FiBell } from "react-icons/fi";
 import { SiSpotify } from "react-icons/si";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Search from '../common/Search'; // Import Search component
 
 export default function Header() {
+    const location = useLocation();
+    const isUserPage = location.pathname.startsWith("/user/");
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const isPremium = currentUser && currentUser.user_type === "premium";
   return (
     <header className="w-full fixed h-16 top-0 bg-black flex items-center justify-between px-4 z-10">
       <SiSpotify className="text-white w-8 h-8 ml-3" />
@@ -19,6 +23,25 @@ export default function Header() {
         </div>
       </div>
 
+      {isUserPage ? (
+        <div className="flex items-center gap-x-6 text-white">
+          {!isPremium && (
+            <button className="bg-white text-black text-sm font-bold px-4 py-1 rounded-full hover:opacity-90 transition">
+              Đăng ký Premium
+            </button>
+          )}
+          <div className="flex items-center gap-x-1 text-sm text-gray-300 hover:text-white cursor-pointer font-semibold">
+            <FiDownload className="w-4 h-4" />
+            Tải xuống
+          </div>
+          <FiBell className="w-5 h-5 text-gray-300 hover:text-white cursor-pointer" />
+          <img
+            src="/avatar.png"
+            alt="Profile"
+            className="w-8 h-8 rounded-full object-cover"
+          />
+        </div>
+      ) : (
       <div className="flex items-center gap-x-4 text-white">
           <a href="https://download.scdn.co/SpotifySetup.exe">
           
@@ -42,6 +65,7 @@ export default function Header() {
           </button>
         </Link>
       </div>
+      )}
     </header>
   );
 }

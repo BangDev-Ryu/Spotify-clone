@@ -16,7 +16,6 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle register logic
   };
 
   return (
@@ -52,7 +51,7 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="text-left">
           <Input
-            label="Email của bạn là gì?"
+            label="Email của bạn"
             type="email"
             required
             placeholder="Nhập email của bạn"
@@ -70,7 +69,7 @@ const Register = () => {
           />
 
           <Input
-            label="Bạn tên là gì?"
+            label="Họ tên của bạn"
             type="text"
             required
             placeholder="Nhập tên người dùng"
@@ -80,7 +79,7 @@ const Register = () => {
 
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-white">
-              Ngày sinh của bạn là khi nào?
+              Ngày sinh của bạn
             </label>
             <Input
               type="date"

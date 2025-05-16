@@ -13,6 +13,21 @@ from .serializer import ArtistSerializer, AlbumSerializer, TrackSerializer, Play
 #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+def user_list(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many = True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def user_detail(request, pk):
+    try:
+        user = User.objects.get(user_id=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response(status=404)
+
+@api_view(['GET'])
 def artist_list(request):
     artists = Artist.objects.all()
     serializer = ArtistSerializer(artists, many=True)

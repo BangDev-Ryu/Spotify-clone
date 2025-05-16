@@ -1,5 +1,6 @@
 import SongRow from "../common/SongRow";
 import ItemGrid from "../common/ItemGrid";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const playlist2 = [
@@ -37,13 +38,26 @@ const dataGrid = [
 
 
 export default function MainContent() {
+  const { id } = useParams();
   const [tracks, setTracks] = useState([]);
   const [albums, setAlbums] = useState([]);
+  const [user, setUsers] = useState(null);
 
   useEffect(() => {
     fetchTracks();
     fetchAlbums();
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/users/");
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const fetchTracks = async () => {
     try {
