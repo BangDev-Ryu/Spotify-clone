@@ -1,8 +1,11 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view, APIView 
 from rest_framework.response import Response
+
 from django.contrib.auth.models import User
 from rest_framework import status
+
+from datetime import date
 
 # from rest_framework import status
 from .models import (
@@ -43,6 +46,21 @@ from .serializer import (
 #     tracks = Track.objects.all()
 #     serializer = TrackSerializer(tracks, many=True)
 #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def user_list(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many = True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def user_detail(request, pk):
+    try:
+        user = User.objects.get(user_id=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response(status=404)
 
 @api_view(['GET'])
 def artist_list(request):
@@ -137,3 +155,23 @@ def login_view(request):
         # Có thể trả về thông tin user hoặc token tuỳ ý
         return Response({"message": "Đăng nhập thành công", "email": user.email, "username": user.username})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def create_payment(request):
+    user_id = request.data.get('user_id')
+    payment_method = request.data.get('payment_method')
+    amount = request.data.get('amount')
+
+    try:
+        user = User.objects.get(pk=user_id)
+        payment = Payment.objects.create(
+            user=user,
+            payment_method=payment_method,
+            payment_date=date.today(),
+            amount=amount if amount else None
+        )
+        return Response({'success': True, 'payment_id': payment.payment_id})
+    except User.DoesNotExist:
+        return Response({'success': False, 'error': 'User not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)}, status=400)
