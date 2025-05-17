@@ -1,9 +1,41 @@
-from rest_framework.decorators import api_view
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.decorators import api_view, APIView 
 from rest_framework.response import Response
-# from rest_framework import status
-from .models import User, Artist, Album, Track, Playlist, PlaylistTrack, Like, Follower, Premium, UserPremium, Payment
+from django.contrib.auth.models import User
+from rest_framework import status
 
-from .serializer import ArtistSerializer, AlbumSerializer, TrackSerializer, PlaylistSerializer, PlaylistTrackSerializer, LikeSerializer, FollowerSerializer, PremiumSerializer, UserPremiumSerializer, PaymentSerializer, UserSerializer
+# from rest_framework import status
+from .models import (
+    User, 
+    Artist, 
+    Album, 
+    Track, 
+    Playlist, 
+    PlaylistTrack, 
+    Like, 
+    Follower, 
+    Premium, 
+    UserPremium, 
+    Payment
+)
+
+from .serializer import (
+    RegisterSerializer,
+    CustomerInfoSerializer ,
+    ArtistSerializer,
+    AlbumSerializer, 
+    TrackSerializer, 
+    PlaylistSerializer, 
+    PlaylistTrackSerializer, 
+    LikeSerializer, 
+    FollowerSerializer, 
+    PremiumSerializer, 
+    UserPremiumSerializer, 
+    PaymentSerializer, 
+    UserSerializer,
+    LoginWithEmailSerializer
+)
+
 
 # Create your views here.
 # @api_view(['GET'])
@@ -83,7 +115,25 @@ def payment_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def payment_list(request):
-    payments = User.objects.all()
-    serializer = UserSerializer(payments, many=True)
+def user_list(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def register_view(request):
+    print('register', request.data)
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+@api_view(['POST'])
+def login_view(request):
+    serializer = LoginWithEmailSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        user = serializer.validated_data['user']
+        # Có thể trả về thông tin user hoặc token tuỳ ý
+        return Response({"message": "Đăng nhập thành công", "email": user.email, "username": user.username})
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
