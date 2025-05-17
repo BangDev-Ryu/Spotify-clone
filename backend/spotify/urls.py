@@ -1,6 +1,5 @@
-# urls.py
 from django.urls import path
-from .views import user_list, artist_list, album_list, track_list, playlist_list, playlisttrack_list, like_list, follower_list, premium_list, userpremium_list, payment_list, track_detail, user_detail, create_payment
+from . import views
 
 urlpatterns = [
     path('users/', user_list, name='user_list'),
@@ -17,4 +16,7 @@ urlpatterns = [
     path('users/<int:pk>/', user_detail, name='user_detail'),
     path('tracks/<int:pk>/', track_detail, name='track_detail'),
     path('payments/create/', create_payment, name='create_payment'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+
 ]
