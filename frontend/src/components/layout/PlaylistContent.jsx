@@ -1,45 +1,105 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { usePlayer } from "../../context/PlayerContext";
 import Music from "/images/default-track.png";
-import SongTable from '../common/SongTable';
+import SongTable from "../common/SongTable";
 
 export default function PlaylistContent() {
-const songs = [
-  { title: "1000 Ánh Mắt", artist: "Shiki, Obito", duration: "2:32" },
-  { title: "Anh Vẫn Đợi", artist: "Shiki", duration: "2:32" },
-  { title: "Có Đôi Điều", artist: "Shiki", duration: "2:54" },
-  { title: "Lặng", artist: "Shiki", duration: "3:16" },
-  { title: "Night Time", artist: "Shiki", duration: "3:48" },
-  { title: "Perfect", artist: "Shiki, Tyronee", duration: "3:08" },
-  { title: "Take Off Your Hands", artist: "Shiki, Obito", duration: "3:24" },
-];
+  const { id } = useParams();
+  const [playlists, setPlaylists] = useState([]);
+  const [tracks, setTracks] = useState([]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const { playTrack } = usePlayer();
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/playlists/")
+      .then((res) => res.json())
+      .then((data) => setPlaylists(data))
+      .catch((err) => console.error("Fetch playlists error:", err));
+  }, []);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/tracks/")
+      .then((res) => res.json())
+      .then((data) => setTracks(data))
+      .catch((err) => console.error("Fetch tracks error:", err));
+  }, []);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/playlisttracks/")
+      .then((res) => res.json())
+      .then((data) => setPlaylistTracks(data))
+      .catch((err) => console.error("Fetch playlist_tracks error:", err));
+  }, []);
+
+  const currentPlaylist = playlists.find(
+    (playlist) => playlist.playlist_id === parseInt(id)
+  );
+
+  const relatedTrackIds = playlistTracks
+    .filter((pt) => pt.playlist === parseInt(id))
+    .map((pt) => pt.track);
+
+  const filteredTracks = tracks.filter((track) =>
+    relatedTrackIds.includes(track.track_id)
+  );
+
+  const enrichedTracks = filteredTracks.map((track) => ({
+    ...track,
+    artist_name: "", // Không có nghệ sĩ
+  }));
+
+  const totalTracksInPlaylist = playlistTracks.filter(
+    (pt) => pt.playlist === parseInt(id)
+  ).length;
+
+  const handlePlayTrack = async (trackId) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/tracks/${trackId}`
+      );
+      const track = response.data;
+      playTrack({
+        id: track.track_id,
+        title: track.name,
+        artist: "", // Không có nghệ sĩ
+        image: track.image,
+        audio: track.path,
+      });
+    } catch (err) {
+      console.error("Lỗi khi play track:", err);
+    }
+  };
+
+  const handlePlayPlaylist = () => {
+    if (filteredTracks.length > 0) {
+      handlePlayTrack(filteredTracks[0].track_id);
+    }
+  };
 
   return (
     <div className="ml-[270px] pb-48 mt-[64px] w-[calc(100vw-290px)] rounded-2xl overflow-hidden">
       <div className="h-[300px] w-full bg-[#163B35FF] flex items-center">
         <div className="ml-8 flex items-end">
           <img
-            src={Music}
+            src={currentPlaylist?.image || Music}
             className="w-[232px] h-[232px] rounded-lg shadow-2xl"
-            alt="123"
+            alt={currentPlaylist?.name || "Playlist"}
           />
           <div className="ml-6 *:text-white">
-            <span className="text-sm font-bold">Bài hát</span>
-            <h1 className="text-8xl font-[800] pb-6">Lặng</h1>
+            <span className="text-sm font-bold">Playlist</span>
+            <h1 className="text-8xl font-[800] pb-6">
+              {currentPlaylist ? currentPlaylist.name : "Đang tải..."}
+            </h1>
             <div className="flex items-center gap-2">
               <img src={Music} alt="avatar" className="w-4 h-4 rounded-full" />
-              <span className="font-semibold">Shiki</span>
               <ul className="flex gap-1 text-sm">
                 <li className="font-semibold relative pl-3 before:content-['•'] before:absolute before:left-0 before:text-gray-400">
-                  Bảo Tàng Của Nối Tiếc
+                  {currentPlaylist?.description || "Miêu tả"}
                 </li>
                 <li className="font-semibold relative pl-3 text-gray-400 before:content-['•'] before:absolute before:left-0 before:text-gray-400">
-                  2024
-                </li>
-                <li className="font-semibold relative pl-3 text-gray-400 before:content-['•'] before:absolute before:left-0 before:text-gray-400">
-                  3:15
-                </li>
-                <li className="font-semibold relative pl-3 text-gray-400 before:content-['•'] before:absolute before:left-0 before:text-gray-400">
-                  32.504.973
+                  {totalTracksInPlaylist} bài hát
                 </li>
               </ul>
             </div>
@@ -47,84 +107,26 @@ const songs = [
         </div>
       </div>
       <div className="pt-8 bg-gradient-to-t from-black to-[#0f2925] px-6 min-h-screen">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <button className="bg-[#1ed760] w-[60px] h-[60px] hover:scale-105  transition-all rounded-full">
-              <span className="w-full flex justify-center">
-                <svg
-                  data-encore-id="icon"
-                  role="img"
-                  aria-hidden="true"
-                  className="w-[30px] "
-                  viewBox="0 0 24 24"
-                >
-                  <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
-                </svg>
-              </span>
-            </button>
-            <div className="w-[38px] h-[50px] rounded-xl overflow-hidden border-2 border-white ">
-              <img src={Music} alt="music" className="w-full h-full" />
-            </div>
-            <div className="">
+        <div className="flex items-center justify-between mb-2 ml-4">
+          <button
+            className="bg-[#1ed760] w-[60px] h-[60px] hover:scale-105  transition-all rounded-full"
+            onClick={handlePlayPlaylist}
+            aria-label="Play playlist"
+          >
+            <span className="w-full flex justify-center">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                data-encore-id="icon"
+                role="img"
+                aria-hidden="true"
+                className="w-[30px]"
                 viewBox="0 0 24 24"
-                fill="none"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="w-[35px] h-[35px] hover:scale-105 transition-all stroke-gray-300 lucide lucide-circle-plus-icon lucide-circle-plus"
               >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M8 12h8" />
-                <path d="M12 8v8" />
+                <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
               </svg>
-            </div>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                className="w-[35px] h-[35px] hover:scale-105 transition-all stroke-gray-300 lucide lucide-ellipsis-icon lucide-ellipsis"
-              >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="19" cy="12" r="1" />
-                <circle cx="5" cy="12" r="1" />
-              </svg>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-gray-300 font-semibold">Danh sách</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="w-[35px] h-[35px] hover:scale-105 transition-all stroke-gray-300 lucide lucide-list-icon lucide-list"
-            >
-              <path d="M3 12h.01" />
-              <path d="M3 18h.01" />
-              <path d="M3 6h.01" />
-              <path d="M8 12h13" />
-              <path d="M8 18h13" />
-              <path d="M8 6h13" />
-            </svg>
-          </div>
+            </span>
+          </button>
         </div>
-        <SongTable songs={songs} />
+        <SongTable tracks={enrichedTracks} onPlayTrack={handlePlayTrack} />
       </div>
     </div>
   );
