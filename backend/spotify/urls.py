@@ -1,9 +1,8 @@
-# urls.py
 from django.urls import path
-from .views import artist_list, album_list, track_list, playlist_list, playlisttrack_list, like_list, follower_list, premium_list, userpremium_list, payment_list, track_detail
+from . import views
 
 urlpatterns = [
-    path('users/', artist_list, name='artist_list'),
+    path('users/', user_list, name='user_list'),
     path('artists/', artist_list, name='artist_list'),
     path('albums/', album_list, name='album_list'),
     path('tracks/', track_list, name='track_list'),
@@ -14,6 +13,10 @@ urlpatterns = [
     path('premiums/', premium_list, name='premium_list'),
     path('userpremiums/', userpremium_list, name='userpremium_list'),
     path('payments/', payment_list, name='payment_list'),
-    
+    path('users/<int:pk>/', user_detail, name='user_detail'),
     path('tracks/<int:pk>/', track_detail, name='track_detail'),
+    path('payments/create/', create_payment, name='create_payment'),
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+
 ]
