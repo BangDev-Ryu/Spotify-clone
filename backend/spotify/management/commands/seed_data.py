@@ -25,6 +25,7 @@ class Command(BaseCommand):
         users = [
             {"name": "John Doe", "email": "john@example.com", "password": "password123", "date_of_birth": "1990-01-01", "image": default_image, "user_type": "premium"},
             {"name": "Jane Smith", "email": "jane@example.com", "password": "password456", "date_of_birth": "1992-02-02", "image": default_image, "user_type": "free"},
+            
         ]
         for user_data in users:
             User.objects.create(**user_data)
@@ -78,7 +79,7 @@ class Command(BaseCommand):
             {"playlist": playlist_one, "track": Track.objects.get(name="Song One"), "order": 1},
             {"playlist": playlist_one, "track": Track.objects.get(name="Song Two"), "order": 2},
             {"playlist": playlist_two, "track": Track.objects.get(name="Song Three"), "order": 1},
-        ]
+        ]   
         for playlist_track_data in playlist_tracks:
             PlaylistTrack.objects.create(**playlist_track_data)
 

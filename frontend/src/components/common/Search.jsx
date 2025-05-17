@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // thêm useRef
 import { FiSearch, FiCreditCard } from "react-icons/fi";
 import { FaPlay } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { usePlayer } from "../../context/PlayerContext"; // Player context
+import { usePlayer } from "../../context/PlayerContext";
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,6 +12,8 @@ export default function Search() {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const { playTrack } = usePlayer();
   const navigate = useNavigate();
+
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const fetchTracks = async () => {
@@ -38,7 +40,7 @@ export default function Search() {
   }, [searchTerm, allTracks]);
 
   const handlePlay = async (e, trackId) => {
-    e.stopPropagation(); // Đừng để navigate
+    e.stopPropagation();
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/tracks/${trackId}`);
       const track = response.data;
@@ -54,8 +56,23 @@ export default function Search() {
     }
   };
 
+  // Thêm useEffect bắt click ngoài
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setDropdownVisible(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [containerRef]);
+
   return (
-    <div className="relative w-full">
+    // Gán ref cho div bao cả input + dropdown
+    <div className="relative w-full" ref={containerRef}>
       <form
         onSubmit={(e) => e.preventDefault()}
         className="flex items-center bg-neutral-800 rounded-full px-4 py-2 flex-grow"
@@ -69,21 +86,17 @@ export default function Search() {
           placeholder="Bạn muốn phát nội dung gì?"
           className="bg-transparent text-white placeholder-gray-400 outline-none w-full"
         />
-        <span className="text-gray-400 mx-1 text-2xl">|</span>
-        <FiCreditCard className="text-gray-400 ml-3 w-7 h-7" />
       </form>
 
-      {/* Dropdown */}
       {isDropdownVisible && filteredTracks.length > 0 && (
-        <div className="absolute top-full left-0 w-full bg-black text-white p-2 mt-2 rounded-md shadow-lg z-50 max-h-64 overflow-y-auto">
+        <div className="absolute top-full left-0 w-full bg-neutral-800 text-white p-2 mt-2 rounded-md shadow-lg z-50 max-h-64 overflow-y-auto">
           <ul>
             {filteredTracks.map((track) => (
               <li
                 key={track.track_id}
-                className="py-2 px-3 rounded cursor-pointer hover:bg-neutral-800 flex items-center gap-3 relative group"
+                className="py-2 px-3 rounded cursor-pointer hover:bg-neutral-500 flex items-center gap-3 relative group"
                 onClick={() => navigate(`/track/${track.track_id}`)}
               >
-                {/* Track Image + Play Button */}
                 <div className="relative w-12 h-12 shrink-0">
                   <img
                     src={track.image || track.thumbnail || "/default.png"}

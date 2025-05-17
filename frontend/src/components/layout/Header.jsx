@@ -1,15 +1,20 @@
 import { FiHome, FiDownload } from "react-icons/fi";
 import { SiSpotify } from "react-icons/si";
-import { Link } from 'react-router-dom';
-import Search from '../common/Search'; // Import Search component
+import { Link, useNavigate } from 'react-router-dom';
+import Search from '../common/Search'; 
 
 export default function Header() {
+   const navigate = useNavigate();
   return (
     <header className="w-full fixed h-16 top-0 bg-black flex items-center justify-between px-4 z-10">
       <SiSpotify className="text-white w-8 h-8 ml-3" />
 
       <div className="ml-40 flex items-center w-[35%]">
-        <button className="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center hover:bg-neutral-700 transition mr-3">
+        <button 
+        onClick={() => navigate("/")}
+        className="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center hover:bg-neutral-700 transition mr-3"
+        >
+
           <FiHome className="text-white w-6 h-6" />
         </button>
 

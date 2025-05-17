@@ -1,37 +1,43 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SidebarPlaylists = ({ playlists, isCollapsed }) => {
-  //const navigate = useNavigate();
+export default function SidebarPlaylists({ isCollapsed, searchTerm }) {
+  const [playlists, setPlaylists] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/playlists/")
+      .then((res) => res.json())
+      .then((data) => setPlaylists(data))
+      .catch((err) => console.error("Fetch playlists error:", err));
+  }, []);
+
+  const filtered = playlists.filter(p =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (isCollapsed) return null;
 
-  const validPlaylists = playlists.filter(p => p.name.trim() !== "");
-
   return (
     <div className="mb-4 space-y-2">
-      {validPlaylists.length > 0 ? (
-        validPlaylists.map((playlist) => (
-          <button
-            key={playlist.id}
-            className="flex items-center gap-3 w-full h-15 text-base text-left px-3 py-1 bg-neutral-800 rounded font-semibold hover:bg-neutral-700"
-           // onClick={() => navigate(`/playlist/${playlist.id}`)}
+      {filtered.length > 0 ? (
+        filtered.map(p => (
+          <div
+            key={p.playlist_id}
+            className="flex items-center gap-3 bg-[#121212] px-3 py-2 rounded hover:bg-neutral-700"
+            onClick={() => navigate(`/playlist/${p.playlist_id}`)}
           >
             <img
-              src={playlist.image}
-              alt={playlist.name}
-              className="w-6 h-6 rounded object-cover"
+              src={p.image}
+              alt={p.name}
+              className="w-13 h-13 object-cover rounded"
             />
-            {playlist.name}
-          </button>
+            <span className="text-white font-semibold">{p.name}</span>
+          </div>
         ))
       ) : (
-        <div className="text-neutral-500 text-sm px-3 py-1">
-          No Playlists Available
-        </div>
+        <div className="text-neutral-500 text-sm px-3 py-1">Không có playlist nào</div>
       )}
     </div>
   );
-};
-
-export default SidebarPlaylists;
+}
