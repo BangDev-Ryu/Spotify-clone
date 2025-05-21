@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework import status
 
-from datetime import date
+from datetime import date, timedelta
 
 # from rest_framework import status
 from .models import (
@@ -161,16 +161,39 @@ def create_payment(request):
     user_id = request.data.get('user_id')
     payment_method = request.data.get('payment_method')
     amount = request.data.get('amount')
-
+    
     try:
         user = User.objects.get(pk=user_id)
+        
+        premium_plan = Premium.objects.get(name="Premium Plan 1")
+        
         payment = Payment.objects.create(
             user=user,
             payment_method=payment_method,
             payment_date=date.today(),
-            amount=amount if amount else None
+            amount=amount
         )
-        return Response({'success': True, 'payment_id': payment.payment_id})
+
+        start_date = payment.payment_date
+        end_date = start_date + timedelta(days=365) 
+        
+        UserPremium.objects.create(
+            user=user,
+            premium=premium_plan,
+            start_date=start_date,
+            end_date=end_date
+        )
+
+        user.user_type = 'premium'
+        user.save()
+
+        return Response({
+            'success': True, 
+            'payment_id': payment.payment_id,
+            'premium_start': start_date,
+            'premium_end': end_date
+        })
+        
     except User.DoesNotExist:
         return Response({'success': False, 'error': 'User not found'}, status=404)
     except Exception as e:

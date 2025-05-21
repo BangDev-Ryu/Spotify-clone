@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
                 ('user_id', models.AutoField(primary_key=True, serialize=False)),
                 ('email', models.EmailField(max_length=254, unique=True)),
-                ('username', models.CharField(blank=True, max_length=150, null=True, unique=True)),
+                ('name', models.CharField(blank=True, max_length=150, null=True, unique=True)),
                 ('date_of_birth', models.DateField()),
                 ('image', models.CharField(blank=True, max_length=255, null=True)),
                 ('user_type', models.CharField(default='user', max_length=10)),

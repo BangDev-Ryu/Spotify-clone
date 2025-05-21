@@ -11,7 +11,7 @@ const Register = () => {
     email: "",
     password: "",
     password_confirmation: "",
-    username: "",
+    name: "",
     birthdate: "",
     // gender: "",
   });
@@ -19,7 +19,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      username: formData.username,
+      name: formData.name,
       email: formData.email,
       password: formData.password,
       password_confirmation: formData.password,
@@ -96,9 +96,9 @@ const Register = () => {
             type="text"
             required
             placeholder="Nhập tên người dùng"
-            value={formData.username}
+            value={formData.name}
             onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
+              setFormData({ ...formData, name: e.target.value })
             }
           />
 
