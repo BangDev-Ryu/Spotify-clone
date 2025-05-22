@@ -57,7 +57,7 @@ const Login = () => {
         localStorage.setItem("currentUserId", data.id.toString());
       }
 
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       setError(err.message || "Đăng nhập thất bại");
     } finally {

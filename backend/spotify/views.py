@@ -153,7 +153,7 @@ def login_view(request):
     if serializer.is_valid(raise_exception=True):
         user = serializer.validated_data['user']
         # Có thể trả về thông tin user hoặc token tuỳ ý
-        return Response({"message": "Đăng nhập thành công", "email": user.email, "username": user.username})
+        return Response({"message": "Đăng nhập thành công", "email": user.email, "username": user.name})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
