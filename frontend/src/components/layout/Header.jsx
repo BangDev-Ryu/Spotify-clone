@@ -7,7 +7,7 @@ export default function Header() {
     const navigate = useNavigate();
     const location = useLocation();
     const isUserPage = location.pathname.startsWith("/user/");
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = JSON.parse(sessionStorage.getItem("currentUser")); // Changed from localStorage to sessionStorage
     const isPremium = currentUser && currentUser.user_type === "premium";
   return (
     
