@@ -153,7 +153,7 @@ def login_view(request):
     if serializer.is_valid(raise_exception=True):
         user = serializer.validated_data['user']
         # Có thể trả về thông tin user hoặc token tuỳ ý
-        return Response({"message": "Đăng nhập thành công", "email": user.email, "username": user.name})
+        return Response({"message": "Đăng nhập thành công", "user_id": user.user_id, "email": user.email, "username": user.name, "user_type" : user.user_type})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -164,8 +164,8 @@ def create_payment(request):
     
     try:
         user = User.objects.get(pk=user_id)
-        
-        premium_plan = Premium.objects.get(name="Premium Plan 1")
+        # Lấy hoặc tạo Premium Plan mặc định
+        premium, created = Premium.objects.get_or_create(name="Premium Plan 1")
         
         payment = Payment.objects.create(
             user=user,
@@ -179,7 +179,7 @@ def create_payment(request):
         
         UserPremium.objects.create(
             user=user,
-            premium=premium_plan,
+            premium=premium,
             start_date=start_date,
             end_date=end_date
         )
@@ -197,4 +197,36 @@ def create_payment(request):
     except User.DoesNotExist:
         return Response({'success': False, 'error': 'User not found'}, status=404)
     except Exception as e:
-        return Response({'success': False, 'error': str(e)}, status=400)
+        return Response({
+            'success': False,
+            'error': str(e),
+            'details': {
+                'user_id': request.data.get('user_id'),
+                'payment_method': request.data.get('payment_method'),
+                'amount': request.data.get('amount')
+            }
+        }, status=400)
+
+@api_view(['PUT', 'PATCH'])  
+def update_user(request, pk):
+    try:
+        user = User.objects.get(user_id=pk)
+        
+        # Lấy dữ liệu hiện tại của user
+        current_data = UserSerializer(user).data
+        
+        # Cập nhật với dữ liệu mới từ request
+        for key, value in request.data.items():
+            setattr(user, key, value)
+            
+        # Lưu vào database
+        user.save()
+        
+        # Trả về dữ liệu đã cập nhật
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
