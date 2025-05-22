@@ -14,7 +14,7 @@ export default function Premium() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user_id: currentUser.id,
+          user_id: currentUser.user_id,
           payment_method: method,
           amount: 59000,
         }),
@@ -22,25 +22,32 @@ export default function Premium() {
       const data = await res.json();
       if (data && data.success) {
         const updateRes = await fetch(
-          `http://127.0.0.1:8000/api/users/${currentUser.id}/`,
+          `http://127.0.0.1:8000/api/users/update/${currentUser.user_id}/`,
           {
-            method: "PATCH",
+            method: "PATCH", // Thay đổi từ PUT sang PATCH
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ user_type: "premium" }),
           }
         );
+
         if (updateRes.ok) {
           const updatedUser = { ...currentUser, user_type: "premium" };
           sessionStorage.setItem("currentUser", JSON.stringify(updatedUser));
           alert("Đăng ký Premium thành công!");
           window.location.reload();
         } else {
-          alert("Thanh toán thành công nhưng cập nhật tài khoản thất bại!");
+          const errorData = await updateRes.json();
+          alert(
+            `Thanh toán thành công nhưng cập nhật tài khoản thất bại: ${
+              errorData.error || "Unknown error"
+            }`
+          );
         }
       } else {
         alert("Thanh toán thất bại!");
       }
     } catch (err) {
+      console.error(err);
       alert("Lỗi kết nối server!");
     }
   };
