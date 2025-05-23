@@ -11,7 +11,7 @@ const Register = () => {
     email: "",
     password: "",
     password_confirmation: "",
-    username: "",
+    name: "",
     birthdate: "",
   });
 
@@ -52,7 +52,7 @@ const Register = () => {
     e.preventDefault();
     if (!validateForm()) return;
     const payload = {
-      username: formData.username,
+      name: formData.name,
       email: formData.email,
       password: formData.password,
       password_confirmation: formData.password_confirmation,
@@ -130,7 +130,7 @@ const Register = () => {
             type="text"
             required
             placeholder="Nhập tên người dùng"
-            value={formData.username}
+            value={formData.name}
             onChange={(e) =>
               setFormData({
                 ...formData,

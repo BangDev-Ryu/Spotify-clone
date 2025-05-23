@@ -51,13 +51,18 @@ const Login = () => {
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Đăng nhập thất bại");
-      if (data && data.user && data.user.id) {
-        localStorage.setItem("currentUserId", data.user.id.toString());
-      } else if (data && data.id) {
-        localStorage.setItem("currentUserId", data.id.toString());
-      }
+      console.log(data);
 
-      navigate("/home");
+      // Lưu thông tin user vào sessionStorage
+      const user = {
+        user_id: data.user_id,
+        email: data.email,
+        name: data.username,
+        user_type: data.user_type || "free",
+      };
+      sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+      navigate("/");
     } catch (err) {
       setError(err.message || "Đăng nhập thất bại");
     } finally {

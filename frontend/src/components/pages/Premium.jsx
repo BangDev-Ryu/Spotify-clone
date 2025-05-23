@@ -8,39 +8,49 @@ export default function Premium() {
   };
 
   const handlePayment = async (method) => {
-  try {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    const res = await fetch("http://127.0.0.1:8000/api/payments/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_id: currentUser.id,
-        payment_method: method,
-        amount: 59000, 
-      }),
-    });
-    const data = await res.json();
-    if (data && data.success) {
-      const updateRes = await fetch(`http://127.0.0.1:8000/api/users/${currentUser.id}/`, {
-        method: "PATCH",
+    try {
+      const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+      const res = await fetch("http://127.0.0.1:8000/api/payments/create/", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_type: "premium" }),
+        body: JSON.stringify({
+          user_id: currentUser.user_id,
+          payment_method: method,
+          amount: 59000,
+        }),
       });
-      if (updateRes.ok) {
-        const updatedUser = { ...currentUser, user_type: "premium" };
-        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-        alert("Đăng ký Premium thành công!");
-        window.location.reload();
+      const data = await res.json();
+      if (data && data.success) {
+        const updateRes = await fetch(
+          `http://127.0.0.1:8000/api/users/update/${currentUser.user_id}/`,
+          {
+            method: "PATCH", // Thay đổi từ PUT sang PATCH
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_type: "premium" }),
+          }
+        );
+
+        if (updateRes.ok) {
+          const updatedUser = { ...currentUser, user_type: "premium" };
+          sessionStorage.setItem("currentUser", JSON.stringify(updatedUser));
+          alert("Đăng ký Premium thành công!");
+          window.location.reload();
+        } else {
+          const errorData = await updateRes.json();
+          alert(
+            `Thanh toán thành công nhưng cập nhật tài khoản thất bại: ${
+              errorData.error || "Unknown error"
+            }`
+          );
+        }
       } else {
-        alert("Thanh toán thành công nhưng cập nhật tài khoản thất bại!");
+        alert("Thanh toán thất bại!");
       }
-    } else {
-      alert("Thanh toán thất bại!");
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi kết nối server!");
     }
-  } catch (err) {
-    alert("Lỗi kết nối server!");
-  }
-};
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-indigo-900 to-black text-white">

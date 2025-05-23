@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework import status
 
-from datetime import date
+from datetime import date, timedelta
 
 # from rest_framework import status
 from .models import (
@@ -153,7 +153,7 @@ def login_view(request):
     if serializer.is_valid(raise_exception=True):
         user = serializer.validated_data['user']
         # Có thể trả về thông tin user hoặc token tuỳ ý
-        return Response({"message": "Đăng nhập thành công", "email": user.email, "username": user.username})
+        return Response({"message": "Đăng nhập thành công", "user_id": user.user_id, "email": user.email, "username": user.name, "user_type" : user.user_type})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -161,17 +161,72 @@ def create_payment(request):
     user_id = request.data.get('user_id')
     payment_method = request.data.get('payment_method')
     amount = request.data.get('amount')
-
+    
     try:
         user = User.objects.get(pk=user_id)
+        # Lấy hoặc tạo Premium Plan mặc định
+        premium, created = Premium.objects.get_or_create(name="Premium Plan 1")
+        
         payment = Payment.objects.create(
             user=user,
             payment_method=payment_method,
             payment_date=date.today(),
-            amount=amount if amount else None
+            amount=amount
         )
-        return Response({'success': True, 'payment_id': payment.payment_id})
+
+        start_date = payment.payment_date
+        end_date = start_date + timedelta(days=365) 
+        
+        UserPremium.objects.create(
+            user=user,
+            premium=premium,
+            start_date=start_date,
+            end_date=end_date
+        )
+
+        user.user_type = 'premium'
+        user.save()
+
+        return Response({
+            'success': True, 
+            'payment_id': payment.payment_id,
+            'premium_start': start_date,
+            'premium_end': end_date
+        })
+        
     except User.DoesNotExist:
         return Response({'success': False, 'error': 'User not found'}, status=404)
     except Exception as e:
-        return Response({'success': False, 'error': str(e)}, status=400)
+        return Response({
+            'success': False,
+            'error': str(e),
+            'details': {
+                'user_id': request.data.get('user_id'),
+                'payment_method': request.data.get('payment_method'),
+                'amount': request.data.get('amount')
+            }
+        }, status=400)
+
+@api_view(['PUT', 'PATCH'])  
+def update_user(request, pk):
+    try:
+        user = User.objects.get(user_id=pk)
+        
+        # Lấy dữ liệu hiện tại của user
+        current_data = UserSerializer(user).data
+        
+        # Cập nhật với dữ liệu mới từ request
+        for key, value in request.data.items():
+            setattr(user, key, value)
+            
+        # Lưu vào database
+        user.save()
+        
+        # Trả về dữ liệu đã cập nhật
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)

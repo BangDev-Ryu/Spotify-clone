@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         extra_kwargs = {
-            'username': {'read_only': True}
+            'name': {'read_only': True}
         }
     
 class LoginWithEmailSerializer(serializers.Serializer):
@@ -48,15 +48,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all(), message="Email đã tồn tại.")]
     )
-    username = serializers.CharField(
+    name = serializers.CharField(
         required=True,
-        validators=[UniqueValidator(queryset=User.objects.all(), message="Username đã tồn tại.")]
+        validators=[UniqueValidator(queryset=User.objects.all(), message="Tên đã tồn tại.")]
     )
     date_of_birth = serializers.DateField(required=True)
     
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password_confirmation', 'date_of_birth')
+        fields = ('name', 'email', 'password', 'password_confirmation', 'date_of_birth')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirmation']:
@@ -66,7 +66,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password_confirmation')
         user = User.objects.create_user(
-            username=validated_data['username'],
+            name=validated_data['name'],
             email=validated_data['email'],
             password=validated_data['password'],
             date_of_birth=validated_data['date_of_birth'],
@@ -127,4 +127,4 @@ class PaymentSerializer(serializers.ModelSerializer):
 class CustomerInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'email', 'username', 'date_of_birth', 'image', 'user_type']
+        fields = ['user_id', 'email', 'name', 'date_of_birth', 'image', 'user_type']

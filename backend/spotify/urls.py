@@ -18,5 +18,6 @@ urlpatterns = [
     path('payments/create/', views.create_payment, name='create_payment'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
+    path('users/update/<int:pk>/', views.update_user, name='update_user'),
 
 ]
