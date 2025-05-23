@@ -53,13 +53,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=User.objects.all(), message="Tên đã tồn tại.")]
     )
     date_of_birth = serializers.DateField(required=True)
-
     
     class Meta:
         model = User
         fields = ('name', 'email', 'password', 'password_confirmation', 'date_of_birth')
 
-    def checkRe_pwd(self, attrs):
+    def validate(self, attrs):
         if attrs['password'] != attrs['password_confirmation']:
             raise serializers.ValidationError({"password": "Mật khẩu xác nhận không khớp."})
         return attrs

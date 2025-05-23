@@ -19,21 +19,24 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(unique=True)
-    name = models.CharField(max_length=150, unique=True, null=True, blank=True) 
+    username = models.CharField(max_length=150, unique=True, null=True, blank=True)
     date_of_birth = models.DateField()
     image = models.CharField(max_length=255, null=True, blank=True)
-    user_type = models.CharField(max_length=10, default='user')
-
+    user_type = models.CharField(max_length=10, default='free')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'date_of_birth']
 
-    objects = UserManager() 
+    objects = UserManager()
 
     def __str__(self):
         return self.email
+
+    @property
+    def name(self):
+        return self.username
 
 class Artist(models.Model):
     artist_id = models.AutoField(primary_key=True)

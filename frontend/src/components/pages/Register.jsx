@@ -13,16 +13,49 @@ const Register = () => {
     password_confirmation: "",
     name: "",
     birthdate: "",
-    // gender: "",
   });
+
+  // Kiểm tra dữ liệu đầu vào (sai->báo lỗi; đúng->gửi lên django)
+  const validateForm = () => {
+    if (!formData.email) {
+      alert("Email không được để trống");
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      alert("Email không hợp lệ");
+      return false;
+    }
+    if (!formData.password) {
+      alert("Mật khẩu không được để trống");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      alert("Mật khẩu phải có ít nhất 6 ký tự");
+      return false;
+    }
+    if (formData.password !== formData.password_confirmation) {
+      alert("Mật khẩu xác nhận không khớp");
+      return false;
+    }
+    if (!formData.username) {
+      alert("Tên người dùng không được để trống");
+      return false;
+    }
+    if (!formData.birthdate) {
+      alert("Ngày sinh không được để trống");
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     const payload = {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      password_confirmation: formData.password,
+      password_confirmation: formData.password_confirmation,
       date_of_birth: formData.birthdate,
     };
 
@@ -33,10 +66,9 @@ const Register = () => {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
+      // Thông báo và chuyển hướng đến trang đăng nhập nếu thành công
       if (res.ok) {
-        // Đăng ký thành công, chuyển hướng hoặc thông báo
         alert("Đăng ký thành công!");
-        // Chuyển hướng đến trang đăng nhập
         window.location.href = "/login";
       } else {
         // Hiển thị lỗi từ backend
@@ -73,7 +105,10 @@ const Register = () => {
             placeholder="Tạo mật khẩu"
             value={formData.password}
             onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
+              setFormData({
+                ...formData,
+                password: e.target.value,
+              })
             }
           />
 
@@ -90,52 +125,33 @@ const Register = () => {
               })
             }
           />
-
           <Input
-            label="Họ tên của bạn"
+            label="Tên người dùng của bạn"
             type="text"
             required
             placeholder="Nhập tên người dùng"
             value={formData.name}
             onChange={(e) =>
-              setFormData({ ...formData, name: e.target.value })
+              setFormData({
+                ...formData,
+                username: e.target.value,
+              })
             }
           />
-
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-white">
-              Ngày sinh của bạn
-            </label>
-            <Input
-              type="date"
-              required
-              value={formData.birthdate}
-              onChange={(e) =>
-                setFormData({ ...formData, birthdate: e.target.value })
-              }
-            />
-          </div>
-
-          {/* <div className="mb-6">
-            <label className="block mb-2 text-sm font-bold text-white">
-              Giới tính của bạn là gì?
-            </label>
-            <div className="flex gap-4">
-              {['Nam', 'Nữ', 'Khác'].map(gender => (
-                <label key={gender} className="flex items-center gap-2 p-3 border border-[#727272] rounded-md cursor-pointer">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value={gender}
-                    checked={formData.gender === gender}
-                    onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                    className="text-[#1ed760]"
-                  />
-                  <span className="text-white">{gender}</span>
-                </label>
-              ))}
-            </div>
-          </div> */}
+          <label className="block mb-2 text-sm font-bold text-white">
+            Ngày sinh của bạn
+          </label>
+          <Input
+            type="date"
+            required
+            value={formData.birthdate}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                birthdate: e.target.value,
+              })
+            }
+          />
 
           <Button type="submit" variant="primary">
             Đăng ký

@@ -81,7 +81,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'spotify_clone',
-        'USER': 'root',
+        'USER': 'a',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306',
